@@ -63,9 +63,24 @@ class UsersController extends Controller
         $followers = $user->followers()->paginate(10);
         
         //  フォロワー一覧ビューでそれらを表示
-        return view('users.followings', [
+        return view('users.followers', [
             'user' => $user,
             'users' => $followers,
         ]);
-    }   
+    }
+    //  ユーザーのお気に入り一覧を表示するアクション
+    public function favorites($id) {
+        //  idの値でユーザーを検索して取得
+        $user = User::findOrFail($id);
+        
+        //  関係するモデルの件数をロード
+        $user->loadRelationshipCounts(); 
+        
+        $favorites = $user->favorites()->paginate(10);
+        
+        return view('users.favorites', [
+            'user' => $user,
+            'microposts' => $favorites,
+        ]);
+    }
 }
